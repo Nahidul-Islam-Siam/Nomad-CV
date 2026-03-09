@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -134,7 +134,11 @@ function TemplateCardItem({
   subtitle,
   seed,
   onUseModel,
-}: TemplateCard & { onUseModel: (template: TemplateCard) => void }) {
+  onPreview,
+}: TemplateCard & {
+  onUseModel: (template: TemplateCard) => void;
+  onPreview: (template: TemplateCard) => void;
+}) {
   return (
     <Card className="overflow-hidden border-[#dbe4f3] bg-white shadow-sm">
       <div className="relative h-48 overflow-hidden rounded-none">
@@ -161,7 +165,7 @@ function TemplateCardItem({
         <Button
           type="button"
           variant="outline"
-          onClick={() => onUseModel({ title, subtitle, seed })}
+          onClick={() => onPreview({ title, subtitle, seed })}
           className="h-8 rounded-md border-[#cfd9ec] bg-white text-xs font-semibold text-[#1f355f]"
         >
           See preview
@@ -171,7 +175,13 @@ function TemplateCardItem({
   );
 }
 
-function TemplatesSection({ onUseModel }: { onUseModel: (template: TemplateCard) => void }) {
+function TemplatesSection({
+  onUseModel,
+  onPreview,
+}: {
+  onUseModel: (template: TemplateCard) => void;
+  onPreview: (template: TemplateCard) => void;
+}) {
   return (
     <section id="templates" className="px-3 py-4 sm:px-6">
       <div className="mx-auto max-w-6xl">
@@ -191,11 +201,60 @@ function TemplatesSection({ onUseModel }: { onUseModel: (template: TemplateCard)
 
         <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {templateCards.map((template) => (
-            <TemplateCardItem key={template.seed} {...template} onUseModel={onUseModel} />
+            <TemplateCardItem key={template.seed} {...template} onUseModel={onUseModel} onPreview={onPreview} />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function TemplateLoadingDialog({
+  open,
+  progress,
+}: {
+  open: boolean;
+  progress: number;
+}) {
+  const selectedDone = progress >= 20;
+  const loadingDone = progress >= 70;
+  const finalizingDone = progress >= 100;
+
+  return (
+    <Dialog open={open}>
+      <DialogContent className="w-[92vw] max-w-[560px] rounded-[26px] border-[#d8e0ee] bg-white p-0 [&>button]:hidden">
+        <div className="p-8 text-center sm:p-10">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#dbe8ff]">
+            <Sparkles className="h-10 w-10 animate-pulse text-[#2458f5]" />
+          </div>
+          <h3 className="mt-6 text-4xl font-extrabold text-[#0f172a]">Loading your CV...</h3>
+          <p className="mt-2 text-2xl text-[#53647d]">Preparing your CV template</p>
+
+          <div className="mt-7 h-3 w-full overflow-hidden rounded-full bg-[#d7deea]">
+            <div
+              className="h-full rounded-full bg-[#2563eb] transition-all duration-200"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p className="mt-3 text-[1.35rem] font-semibold text-[#2563eb]">{progress}%</p>
+
+          <div className="mt-6 space-y-3 text-left text-[1.2rem] text-[#475569]">
+            <p className={selectedDone ? "text-[#0f172a]" : "text-[#8ea0b8]"}>
+              <span className={selectedDone ? "mr-2 text-[#16a34a]" : "mr-2 text-[#b8c6da]"}>●</span>
+              Template selected {selectedDone ? "check" : ""}
+            </p>
+            <p className={loadingDone ? "text-[#0f172a]" : "text-[#8ea0b8]"}>
+              <span className={loadingDone ? "mr-2 text-[#16a34a]" : "mr-2 text-[#b8c6da]"}>●</span>
+              Loading CV...
+            </p>
+            <p className={finalizingDone ? "text-[#0f172a]" : "text-[#8ea0b8]"}>
+              <span className={finalizingDone ? "mr-2 text-[#16a34a]" : "mr-2 text-[#b8c6da]"}>●</span>
+              Finalizing...
+            </p>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -523,10 +582,19 @@ function PurchaseDialog({
 
 export default function HomeCvLanding() {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateCard | null>(null);
+  const [isLoaderOpen, setIsLoaderOpen] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
   const [isPurchaseDialogOpen, setIsPurchaseDialogOpen] = useState(false);
 
   const handleUseModel = (template: TemplateCard) => {
+    if (isLoaderOpen) return;
+    setSelectedTemplate(template);
+    setIsLoaderOpen(true);
+    setLoadingProgress(0);
+  };
+
+  const handlePreview = (template: TemplateCard) => {
     setSelectedTemplate(template);
     setIsTemplateDialogOpen(true);
   };
@@ -536,12 +604,34 @@ export default function HomeCvLanding() {
     setIsPurchaseDialogOpen(true);
   };
 
+  useEffect(() => {
+    if (!isLoaderOpen) return;
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      const step = Math.floor(Math.random() * 14) + 9;
+      progress = Math.min(progress + step, 100);
+      setLoadingProgress(progress);
+
+      if (progress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          setIsLoaderOpen(false);
+          setIsTemplateDialogOpen(true);
+        }, 280);
+      }
+    }, 180);
+
+    return () => clearInterval(interval);
+  }, [isLoaderOpen]);
+
   return (
     <div className="bg-[#f5f7fb]">
       <HeroSection />
-      <TemplatesSection onUseModel={handleUseModel} />
+      <TemplatesSection onUseModel={handleUseModel} onPreview={handlePreview} />
       <UploadSection />
       <TestimonialsSection />
+      <TemplateLoadingDialog open={isLoaderOpen} progress={loadingProgress} />
       <SelectedTemplateDialog
         open={isTemplateDialogOpen}
         onOpenChange={setIsTemplateDialogOpen}

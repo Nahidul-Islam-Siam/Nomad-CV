@@ -1,4 +1,3 @@
-import { LoginResponseData } from "@/components/pages/Login/Login";
 import { baseApi } from "@/redux/api/baseApi";
 
 export enum UserRole {
@@ -65,6 +64,13 @@ export interface UserType {
   exp?: number;
   iat?: number;
   userId?: string;
+}
+
+export interface LoginResponseData {
+  user: UserType;
+  accessToken: string;
+  refreshToken: string;
+  updatedUser: unknown;
 }
 
 export interface AuthResponse {
