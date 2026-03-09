@@ -61,16 +61,16 @@ export interface UserType {
   region: string | null;
   country: string | null;
   Image: string[];
-  exp?: number;
-  iat?: number;
-  userId?: string;
+  exp: number;
+  iat: number;
+  userId: string;
 }
 
 export interface LoginResponseData {
   user: UserType;
   accessToken: string;
   refreshToken: string;
-  updatedUser: unknown;
+  updatedUser: UserType | null;
 }
 
 export interface AuthResponse {

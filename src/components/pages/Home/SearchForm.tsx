@@ -33,7 +33,7 @@ const SearchForm = () => {
 
   // Prefill search input from URL
   useEffect(() => {
-    const term = searchParams.get("searchQuery");
+    const term = searchParams?.get("searchQuery");
     if (term) setSearchQuery(term);
   }, [searchParams]);
 

@@ -18,7 +18,8 @@ interface EmailVerificationForm {
 
 export default function EmailVerification() {
   // Capture email from URL query parameters
-  const email = useSearchParams().get("email");
+  const searchParams = useSearchParams();
+  const email = searchParams?.get("email") ?? "";
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -42,9 +43,14 @@ export default function EmailVerification() {
       return;
     }
 
+    if (!email) {
+      toast.error("Email is missing in the verification link.");
+      return;
+    }
+
     // Prepare the data to be sent to the API
     const requestData = {
-      email: email!, // The email should be safely checked or handled if it's not present
+      email,
       token: otp,
     };
 
