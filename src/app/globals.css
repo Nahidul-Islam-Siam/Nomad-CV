@@ -1,0 +1,313 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html {
+  font-family: system-ui, sans-serif;
+  font-size: 1.25rem;
+}
+
+body {
+  margin: 0;
+}
+
+svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+path {
+  fill: #2a354d;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+
+/* Hide only the banner frame, preserve functionality */
+.goog-te-banner-frame {
+    display: none !important;
+}
+ 
+/* Keep the body positioning normal */
+body {
+    top: 0px !important;
+}
+ 
+/* Hide the visual bar but keep the underlying elements */
+.skiptranslate iframe {
+    visibility: hidden !important;
+    height: 0 !important;
+    border: none !important;
+}
+ 
+/* Preserve the container but make it invisible */
+.skiptranslate {
+    height: 0 !important;
+    overflow: hidden !important;
+}
+ 
+
+@media (prefers-color-scheme: dark) {
+  :root { /* Dark background for dark mode */ /* Lighter text color for dark mode */
+  }
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: fit-content;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 30px;
+  background: linear-gradient(90deg, #000 50%, #0000 0) right/200% 100%;
+  animation: l21 2s infinite linear;
+}
+.loader::before {
+  content: "Loading...";
+  color: #0000;
+  padding: 0 5px;
+  background: inherit;
+  background-image: linear-gradient(90deg, #fff 50%, #000 0);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.ant-select-selector {
+  border-radius: 8px !important;
+}
+
+.ant-btn {
+  border-radius: 8px !important;
+}
+
+.ant-card {
+  border-radius: 16px !important;
+}
+
+.ant-modal-content {
+  border-radius: 16px !important;
+}
+
+.ant-segmented {
+  border-radius: 8px !important;
+}
+
+.filter-modal .ant-modal-header {
+  border-radius: 16px 16px 0 0 !important;
+}
+
+/* Custom spacing for form items */
+.ant-form-item {
+  margin-bottom: 0 !important;
+}
+
+/* Ensure proper height for segmented control */
+.ant-segmented {
+  height: 40px !important;
+}
+
+.ant-segmented .ant-segmented-item {
+  height: 38px !important;
+  line-height: 38px !important;
+}
+
+
+
+
+
+:where(.css-dev-only-do-not-override-36gkoj).ant-segmented .ant-segmented-item-selected {
+  background-color: #E2C59F;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  color: rgba(0, 0, 0, 0.88);
+}
+
+
+:where(.css-dev-only-do-not-override-36gkoj).ant-modal .ant-modal-title {
+    margin: 0;
+    color: rgba(0,0,0,0.88);
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.md\:text-\[30px\] {
+    font-size: 20px !important;
+}
+
+
+
+@keyframes l21 {
+  100% {
+    background-position: left;
+  }
+}
+
+/* Small screens (sm) */
+@media (min-width: 640px) {
+  .section-gap {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* Medium screens (md) */
+@media (min-width: 768px) {
+  .section-gap {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+/* Large screens (lg) */
+@media (min-width: 1024px) {
+  .section-gap {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+/* Extra-large screens (xl) */
+@media (min-width: 1280px) {
+  .section-gap {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+/* 2X Large screens (2xl) */
+@media (min-width: 1536px) {
+  .section-gap {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Small screens (sm) */
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Medium screens (md) */
+@media (min-width: 768px) {
+  .container {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+}
+
+/* Large screens (lg) */
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Extra-large screens (xl) */
+@media (min-width: 1280px) {
+  .container {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+}
+
+/* 2X Large screens (2xl) */
+@media (min-width: 1536px) {
+  .container {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
