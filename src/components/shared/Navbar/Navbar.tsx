@@ -183,13 +183,13 @@ export default function Navbar() {
                   SIGN IN
                 </Link>
                 <Button asChild className="h-10 rounded-xl bg-[#2458f5] px-6 text-sm font-bold text-white hover:bg-[#1f4ed9]">
-                  <Link href="/signup">CREATE MY CV</Link>
+                  <Link href="/my-cvs">CREATE MY CV</Link>
                 </Button>
               </>
             ) : (
               <>
                 <Button asChild className="h-10 rounded-xl bg-[#2458f5] px-6 text-sm font-bold text-white hover:bg-[#1f4ed9]">
-                  <Link href="/profile">CREATE MY CV</Link>
+                  <Link href="/my-cvs">CREATE MY CV</Link>
                 </Button>
                 <Dropdown menu={{ items: avatarMenuItems }} trigger={["click"]} placement="bottomRight">
                   <div className="flex items-center gap-2 rounded-lg p-1.5 transition-colors hover:bg-[#f3f6fb] cursor-pointer">
@@ -263,7 +263,7 @@ export default function Navbar() {
                   </Link>
                 </Button>
                 <Button asChild className="h-10 w-full bg-[#2458f5] font-semibold text-white hover:bg-[#1f4ed9]">
-                  <Link href="/signup" onClick={() => setDrawerOpen(false)}>
+                  <Link href="/my-cvs" onClick={() => setDrawerOpen(false)}>
                     CREATE MY CV
                   </Link>
                 </Button>
@@ -271,7 +271,7 @@ export default function Navbar() {
             ) : (
               <div className="space-y-3">
                 <Button asChild className="h-10 w-full bg-[#2458f5] font-semibold text-white hover:bg-[#1f4ed9]">
-                  <Link href="/profile" onClick={() => setDrawerOpen(false)}>
+                  <Link href="/my-cvs" onClick={() => setDrawerOpen(false)}>
                     CREATE MY CV
                   </Link>
                 </Button>

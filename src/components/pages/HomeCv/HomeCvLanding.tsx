@@ -1017,7 +1017,7 @@ function TestimonialsSection() {
           </div>
         </div>
       </div>
-    </section>
+    </section> 
   );
 }
 
