@@ -13,6 +13,7 @@ import {
   Check,
   CheckCircle2,
   CloudUpload,
+  CreditCard,
   Download,
   Eye,
   FileText,
@@ -396,6 +397,30 @@ function AiAssistantWorkspaceDialog({
   template: TemplateCard | null;
 }) {
   const previewTitle = template?.title ?? "Academic Skills";
+  const [workspaceStep, setWorkspaceStep] = useState<"edit" | "payment">("edit");
+  const [activeTab, setActiveTab] = useState<"content" | "design" | "ai">("content");
+  const [selectedColor, setSelectedColor] = useState("#2E64E6");
+  const [selectedFont, setSelectedFont] = useState("Inter");
+
+  const designColors = [
+    "#2E64E6", "#1E3A8A", "#7C3AED", "#DB2777",
+    "#16A34A", "#EA580C", "#0891B2", "#475569",
+    "#1E293B", "#4F46E5", "#0D9488", "#C026D3",
+  ];
+  const fontOptions = ["Inter", "Roboto", "Poppins", "Lato", "Montserrat", "Open Sans"];
+  const provenResultsByTab = {
+    content: { percent: "68%", text: "got an interview within 2 weeks", activeBar: 1 },
+    design: { percent: "85%", text: "recommend our AI tool", activeBar: 2 },
+    ai: { percent: "91%", text: "received positive feedback on their CV", activeBar: 3 },
+  } as const;
+  const paymentResult = { percent: "42%", text: "increased their chances of being contacted", activeBar: 0 } as const;
+  const activeResult = workspaceStep === "payment" ? paymentResult : provenResultsByTab[activeTab];
+
+  useEffect(() => {
+    if (!open) return;
+    setWorkspaceStep("edit");
+    setActiveTab("content");
+  }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -412,7 +437,9 @@ function AiAssistantWorkspaceDialog({
                     Nomad<span className="text-[#2458f5]">CV</span>
                     <WandSparkles className="ml-1 inline h-6 w-6 text-[#2458f5]" />
                   </h3>
-                  <p className="mt-2 text-[1.15rem] font-medium text-[#4b5c74]">Customize your CV with AI</p>
+                  <p className="mt-2 text-[1.15rem] font-medium text-[#4b5c74]">
+                    {workspaceStep === "payment" ? "Complete your order" : "Customize your CV with AI"}
+                  </p>
                 </div>
               </div>
 
@@ -427,14 +454,13 @@ function AiAssistantWorkspaceDialog({
                   </button>
                 </div>
                 <div className="mt-3 flex items-center gap-4">
-                  <span className="text-6xl font-extrabold leading-none text-[#2458f5]">68%</span>
-                  <span className="text-[1.25rem] font-medium text-[#334155]">got an interview within 2 weeks</span>
+                  <span className="text-6xl font-extrabold leading-none text-[#2458f5]">{activeResult.percent}</span>
+                  <span className="text-[1.25rem] font-medium text-[#334155]">{activeResult.text}</span>
                 </div>
                 <div className="mt-3 grid grid-cols-4 gap-1.5">
-                  <div className="h-1 rounded-full bg-[#cfd8e6]" />
-                  <div className="h-1 rounded-full bg-[#2458f5]" />
-                  <div className="h-1 rounded-full bg-[#cfd8e6]" />
-                  <div className="h-1 rounded-full bg-[#cfd8e6]" />
+                  {[0, 1, 2, 3].map((barIndex) => (
+                    <div key={barIndex} className={`h-1 rounded-full ${barIndex === activeResult.activeBar ? "bg-[#2458f5]" : "bg-[#cfd8e6]"}`} />
+                  ))}
                 </div>
               </div>
             </div>
@@ -447,34 +473,145 @@ function AiAssistantWorkspaceDialog({
                 Template
               </span>
               <span className="h-1 w-14 rounded bg-[#cdd7e6]" />
-              <span className="inline-flex items-center gap-2 text-[1rem] font-semibold text-[#2458f5]">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#2458f5] text-sm text-white">2</span>
+              <button
+                type="button"
+                onClick={() => setWorkspaceStep("edit")}
+                className={`inline-flex items-center gap-2 text-[1rem] font-semibold ${
+                  workspaceStep === "edit" ? "text-[#2458f5]" : "text-[#8ca0b8]"
+                }`}
+              >
+                <span
+                  className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm ${
+                    workspaceStep === "edit" ? "bg-[#2458f5] text-white" : "bg-[#cfdae8] text-[#42546c]"
+                  }`}
+                >
+                  2
+                </span>
                 Edit
-              </span>
+              </button>
               <span className="h-1 w-14 rounded bg-[#cdd7e6]" />
-              <span className="inline-flex items-center gap-2 text-[1rem] font-semibold">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#cfdae8] text-sm text-[#42546c]">3</span>
+              <button
+                type="button"
+                onClick={() => setWorkspaceStep("payment")}
+                className={`inline-flex items-center gap-2 text-[1rem] font-semibold ${
+                  workspaceStep === "payment" ? "text-[#2458f5]" : "text-[#8ca0b8]"
+                }`}
+              >
+                <span
+                  className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm ${
+                    workspaceStep === "payment" ? "bg-[#2458f5] text-white" : "bg-[#cfdae8] text-[#42546c]"
+                  }`}
+                >
+                  3
+                </span>
                 Payment
-              </span>
+              </button>
             </div>
           </div>
 
-          <div className="grid flex-1 gap-4 overflow-hidden p-4 md:grid-cols-2">
+          {workspaceStep === "payment" && (
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+              <div className="mx-auto max-w-[640px] rounded-[22px] border border-[#cfd8e6] bg-white p-5 shadow-sm sm:p-7">
+                <h4 className="text-center text-[2.05rem] font-extrabold text-[#0f172a]">
+                  <span className="inline-flex items-center gap-2">
+                    <CreditCard className="h-7 w-7 text-[#1d4ed8]" />
+                    Secure Payment
+                  </span>
+                </h4>
+
+                <div className="mt-6 rounded-2xl border border-[#cfd8e6] bg-[#f6f8fc] p-5">
+                  <h5 className="text-[1.55rem] font-bold text-[#0f172a]">Order Summary</h5>
+                  <div className="mt-4 flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-[1.55rem] font-medium text-[#334155]">AI-Optimized CV</p>
+                      <p className="mt-2 text-[1.05rem] text-[#64748b]">Selected template:</p>
+                      <p className="text-[1.05rem] font-medium text-[#334155]">{template?.title ?? previewTitle}</p>
+                    </div>
+                    <p className="text-[1.7rem] font-bold text-[#0f172a]">20EUR</p>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-[1.05rem] text-[#64748b]">
+                    <span>Formats included:</span>
+                    <span>PDF + Word</span>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between border-t border-[#cfd8e6] pt-3">
+                    <span className="text-[1.9rem] font-bold text-[#0f172a]">Total</span>
+                    <span className="text-[1.9rem] font-bold text-[#2458f5]">20EUR</span>
+                  </div>
+                </div>
+
+                <div className="mt-5 rounded-2xl border border-[#dce5f3] bg-[#f8fbff] p-4">
+                  <h5 className="inline-flex items-center gap-2 text-[1.45rem] font-bold text-[#0f172a]">
+                    <CheckCircle2 className="h-5 w-5 text-[#16a34a]" />
+                    Included in your purchase:
+                  </h5>
+                  <ul className="mt-3 space-y-2 text-[1.1rem] text-[#334155]">
+                    {[
+                      "Instant download in PDF and Word",
+                      "AI-optimized CV",
+                      "nomadcv watermark (discreet)",
+                      "One-time payment - No subscription",
+                    ].map((item) => (
+                      <li key={item} className="flex items-center gap-2">
+                        <Check className="h-4 w-4 text-[#2563eb]" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <Button
+                  type="button"
+                  className="mt-5 h-14 w-full rounded-xl bg-[#1174b7] text-[1.35rem] font-bold text-white hover:bg-[#0f6aa8]"
+                >
+                  <span className="mr-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-base font-extrabold">P</span>
+                  Pay with PayPal
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {workspaceStep === "edit" && (
+            <>
+              <div className="grid flex-1 gap-4 overflow-hidden p-4 md:grid-cols-2">
             <div className="min-h-0 rounded-2xl border border-[#cfd8e6] bg-[#eaf0f8] p-3">
               <div className="grid grid-cols-3 gap-2 rounded-2xl border border-[#cfd8e6] bg-white p-1">
-                <button type="button" className="rounded-xl bg-[#2458f5] px-3 py-2 text-sm font-semibold text-white">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("content")}
+                  className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                    activeTab === "content"
+                      ? "bg-[#2458f5] text-white"
+                      : "text-[#4b5c74] hover:bg-[#f2f6fb]"
+                  }`}
+                >
                   <span className="inline-flex items-center gap-1.5">
                     <FileText className="h-4 w-4" />
                     Content
                   </span>
                 </button>
-                <button type="button" className="rounded-xl px-3 py-2 text-sm font-semibold text-[#4b5c74] hover:bg-[#f2f6fb]">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("design")}
+                  className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                    activeTab === "design"
+                      ? "bg-[#2458f5] text-white"
+                      : "text-[#4b5c74] hover:bg-[#f2f6fb]"
+                  }`}
+                >
                   <span className="inline-flex items-center gap-1.5">
                     <Palette className="h-4 w-4" />
                     Design
                   </span>
                 </button>
-                <button type="button" className="rounded-xl px-3 py-2 text-sm font-semibold text-[#4b5c74] hover:bg-[#f2f6fb]">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("ai")}
+                  className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                    activeTab === "ai"
+                      ? "bg-[#2458f5] text-white"
+                      : "text-[#4b5c74] hover:bg-[#f2f6fb]"
+                  }`}
+                >
                   <span className="inline-flex items-center gap-1.5">
                     <Bot className="h-4 w-4" />
                     AI
@@ -483,63 +620,221 @@ function AiAssistantWorkspaceDialog({
               </div>
 
               <div className="mt-3 max-h-[430px] space-y-3 overflow-y-auto pr-1">
-                <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
-                  <div className="mb-2 flex items-center justify-between">
-                    <h4 className="text-base font-bold text-[#0f172a]">Experience</h4>
-                    <Button type="button" className="h-7 rounded-full bg-[#2458f5] px-3 text-xs font-semibold">
-                      + Add
-                    </Button>
-                  </div>
-                  <div className="space-y-2 rounded-lg border border-[#d7deea] bg-[#f8fafc] p-2.5">
-                    <input type="text" defaultValue={previewTitle} className="h-8 w-full rounded border border-[#d4dcea] bg-white px-2 text-sm" />
-                    <div className="grid grid-cols-2 gap-2">
-                      <input type="text" defaultValue="Enterprise Corp" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
-                      <input type="text" defaultValue="2021 - 2026" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                {activeTab === "content" && (
+                  <>
+                    <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
+                      <div className="mb-2 flex items-center justify-between">
+                        <h4 className="text-base font-bold text-[#0f172a]">Experience</h4>
+                        <Button type="button" className="h-7 rounded-full bg-[#2458f5] px-3 text-xs font-semibold">
+                          + Add
+                        </Button>
+                      </div>
+                      <div className="space-y-2 rounded-lg border border-[#d7deea] bg-[#f8fafc] p-2.5">
+                        <input type="text" defaultValue={previewTitle} className="h-8 w-full rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                        <div className="grid grid-cols-2 gap-2">
+                          <input type="text" defaultValue="Enterprise Corp" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                          <input type="text" defaultValue="2021 - 2026" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                        </div>
+                        <textarea
+                          rows={3}
+                          defaultValue={"- Complex project management\n- Team leadership\n- Performance improvement"}
+                          className="w-full resize-none rounded border border-[#d4dcea] bg-white px-2 py-1.5 text-sm"
+                        />
+                      </div>
                     </div>
-                    <textarea
-                      rows={3}
-                      defaultValue={"- Complex project management\n- Team leadership\n- Performance improvement"}
-                      className="w-full resize-none rounded border border-[#d4dcea] bg-white px-2 py-1.5 text-sm"
-                    />
-                  </div>
-                </div>
 
-                <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
-                  <div className="mb-2 flex items-center justify-between">
-                    <h4 className="text-base font-bold text-[#0f172a]">Education</h4>
-                    <Button type="button" className="h-7 rounded-full bg-[#2458f5] px-3 text-xs font-semibold">
-                      + Add
-                    </Button>
-                  </div>
-                  <div className="space-y-2 rounded-lg border border-[#d7deea] bg-[#f8fafc] p-2.5">
-                    <input
-                      type="text"
-                      defaultValue="Professional Master's"
-                      className="h-8 w-full rounded border border-[#d4dcea] bg-white px-2 text-sm"
-                    />
-                    <div className="grid grid-cols-2 gap-2">
-                      <input type="text" defaultValue="Universite de Paris" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
-                      <input type="text" defaultValue="2017 - 2019" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                    <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
+                      <div className="mb-2 flex items-center justify-between">
+                        <h4 className="text-base font-bold text-[#0f172a]">Education</h4>
+                        <Button type="button" className="h-7 rounded-full bg-[#2458f5] px-3 text-xs font-semibold">
+                          + Add
+                        </Button>
+                      </div>
+                      <div className="space-y-2 rounded-lg border border-[#d7deea] bg-[#f8fafc] p-2.5">
+                        <input
+                          type="text"
+                          defaultValue="Professional Master's"
+                          className="h-8 w-full rounded border border-[#d4dcea] bg-white px-2 text-sm"
+                        />
+                        <div className="grid grid-cols-2 gap-2">
+                          <input type="text" defaultValue="Universite de Paris" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                          <input type="text" defaultValue="2017 - 2019" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
-                  <h4 className="mb-2 text-base font-bold text-[#0f172a]">Skills</h4>
-                  <div className="flex items-center gap-2">
-                    <input type="text" placeholder="Add a skill..." className="h-9 flex-1 rounded border border-[#d4dcea] bg-[#f8fafc] px-2 text-sm" />
-                    <Button type="button" className="h-9 w-9 rounded-xl bg-[#2458f5] p-0 text-lg">
-                      +
-                    </Button>
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {["Leadership", "Communication", "Management", "Innovation"].map((skill) => (
-                      <span key={skill} className="rounded-lg border border-[#a8c4ff] bg-[#eef4ff] px-2.5 py-1 text-xs text-[#2458f5]">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                    <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
+                      <h4 className="mb-2 text-base font-bold text-[#0f172a]">Skills</h4>
+                      <div className="flex items-center gap-2">
+                        <input type="text" placeholder="Add a skill..." className="h-9 flex-1 rounded border border-[#d4dcea] bg-[#f8fafc] px-2 text-sm" />
+                        <Button type="button" className="h-9 w-9 rounded-xl bg-[#2458f5] p-0 text-lg">
+                          +
+                        </Button>
+                      </div>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {["Leadership", "Communication", "Management", "Innovation"].map((skill) => (
+                          <span key={skill} className="rounded-lg border border-[#a8c4ff] bg-[#eef4ff] px-2.5 py-1 text-xs text-[#2458f5]">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {activeTab === "design" && (
+                  <>
+                    <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
+                      <h4 className="mb-3 text-base font-bold text-[#0f172a]">Main Color</h4>
+                      <div className="grid grid-cols-4 gap-2">
+                        {designColors.map((color) => (
+                          <button
+                            key={color}
+                            type="button"
+                            onClick={() => setSelectedColor(color)}
+                            className={`relative h-11 rounded-lg border-4 ${
+                              selectedColor === color ? "border-[#0f172a]" : "border-transparent"
+                            }`}
+                            style={{ backgroundColor: color }}
+                          >
+                            {selectedColor === color && <Check className="mx-auto h-5 w-5 text-white" />}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
+                      <h4 className="mb-3 text-base font-bold text-[#0f172a]">Font (30 fonts)</h4>
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#64748b]">Modern</p>
+                      <div className="rounded-xl border border-[#2E64E6] bg-[#f8fafc] p-2">
+                        <button
+                          type="button"
+                          className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-sm font-medium text-[#1e293b]"
+                        >
+                          <span style={{ fontFamily: selectedFont }}>{selectedFont}</span>
+                          <Check className="h-4 w-4 text-[#2E64E6]" />
+                        </button>
+                        <div className="mt-2 space-y-1 rounded-lg border border-[#dbe4f2] bg-white p-1.5">
+                          {fontOptions.map((font) => (
+                            <button
+                              key={font}
+                              type="button"
+                              onClick={() => setSelectedFont(font)}
+                              className={`block w-full rounded-md px-2 py-1.5 text-left text-sm ${
+                                selectedFont === font ? "bg-[#eaf1ff] text-[#2E64E6]" : "text-[#334155] hover:bg-[#f1f5f9]"
+                              }`}
+                              style={{ fontFamily: font }}
+                            >
+                              {font}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {activeTab === "ai" && (
+                  <>
+                    <div className="rounded-xl border border-[#7db6ff] bg-[#dce9ff] p-4 shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <h4 className="inline-flex items-center gap-2 text-[1.55rem] font-bold text-[#0f172a]">
+                          <Sparkles className="h-5 w-5 text-[#2458f5]" />
+                          AI Assistant
+                        </h4>
+                        <div className="flex items-center gap-2 text-[#2b5dff]">
+                          <WandSparkles className="h-4 w-4" />
+                          <X className="h-4 w-4" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border border-[#9ec2ff] bg-[#eaf1ff] p-4 shadow-sm">
+                      <h4 className="inline-flex items-center gap-2 text-[1.55rem] font-bold text-[#0f172a]">
+                        <Sparkles className="h-5 w-5 text-[#2b5dff]" />
+                        Improve Summary with AI
+                      </h4>
+                      <p className="mt-2 text-[1.05rem] text-[#475569]">
+                        AI will rewrite your summary to make it more impactful and professional.
+                      </p>
+                      <Button
+                        type="button"
+                        className="mt-4 h-11 w-full rounded-xl bg-gradient-to-r from-[#2458f5] to-[#4f46e5] text-[1.05rem] font-semibold text-white hover:from-[#1f4ed9] hover:to-[#4338ca]"
+                      >
+                        <Sparkles className="mr-2 h-4 w-4" />
+                        Improve with AI
+                      </Button>
+                    </div>
+
+                    <div className="rounded-xl border border-[#c7b8ff] bg-[#f0ecff] p-4 shadow-sm">
+                      <h4 className="inline-flex items-center gap-2 text-[1.55rem] font-bold text-[#0f172a]">
+                        <FileText className="h-5 w-5 text-[#7c3aed]" />
+                        Improve Work Experiences
+                      </h4>
+                      <p className="mt-2 text-[1.05rem] text-[#475569]">
+                        AI enriches your work experiences with quantifiable achievements and powerful action verbs.
+                      </p>
+                      <Button
+                        type="button"
+                        className="mt-4 h-11 w-full rounded-xl bg-gradient-to-r from-[#4f46e5] via-[#7c3aed] to-[#a21caf] text-[1.05rem] font-semibold text-white hover:from-[#4338ca] hover:via-[#6d28d9] hover:to-[#86198f]"
+                      >
+                        <WandSparkles className="mr-2 h-4 w-4" />
+                        Improve Experiences
+                      </Button>
+                    </div>
+
+                    <div className="rounded-xl border border-[#9be7b6] bg-[#e8f8ee] p-4 shadow-sm">
+                      <h4 className="inline-flex items-center gap-2 text-[1.55rem] font-bold text-[#0f172a]">
+                        <ShieldCheck className="h-5 w-5 text-[#16a34a]" />
+                        Optimize for ATS Systems
+                      </h4>
+                      <p className="mt-2 text-[1.05rem] text-[#475569]">
+                        Improves your CV&apos;s compatibility with automatic recruitment software.
+                      </p>
+                      <Button
+                        type="button"
+                        className="mt-4 h-11 w-full rounded-xl bg-gradient-to-r from-[#16a34a] to-[#059669] text-[1.05rem] font-semibold text-white hover:from-[#15803d] hover:to-[#047857]"
+                      >
+                        <Check className="mr-2 h-4 w-4" />
+                        Optimize for ATS
+                      </Button>
+                    </div>
+
+                    <div className="rounded-xl border border-[#e2c2ff] bg-[#f6f0ff] p-4 shadow-sm">
+                      <h4 className="inline-flex items-center gap-2 text-[1.55rem] font-bold text-[#0f172a]">
+                        <WandSparkles className="h-5 w-5 text-[#9333ea]" />
+                        Generate Keywords
+                      </h4>
+                      <p className="mt-2 text-[1.05rem] text-[#475569]">
+                        AI suggests relevant skills for your profile.
+                      </p>
+                      <Button
+                        type="button"
+                        className="mt-4 h-11 w-full rounded-xl bg-gradient-to-r from-[#9333ea] to-[#e6007a] text-[1.05rem] font-semibold text-white hover:from-[#7e22ce] hover:to-[#be185d]"
+                      >
+                        <span className="mr-2 text-lg leading-none">+</span>
+                        Generate Keywords
+                      </Button>
+                    </div>
+
+                    <div className="rounded-xl border border-[#f3d685] bg-[#fff8df] p-4 shadow-sm">
+                      <div className="flex items-center justify-between gap-3">
+                        <h4 className="inline-flex items-center gap-2 text-[1.55rem] font-bold text-[#0f172a]">
+                          <Bot className="h-5 w-5 text-[#d97706]" />
+                          AI Suggestions
+                        </h4>
+                        <Button
+                          type="button"
+                          className="h-8 rounded-full bg-[#f59e0b] px-4 text-xs font-bold text-white hover:bg-[#d97706]"
+                        >
+                          <WandSparkles className="mr-1.5 h-3.5 w-3.5" />
+                          Generate
+                        </Button>
+                      </div>
+                      <p className="mt-2 text-[1rem] italic text-[#64748b]">Click &apos;Generate&apos; to get personalized tips</p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -552,7 +847,9 @@ function AiAssistantWorkspaceDialog({
               </h4>
               <div className="relative max-h-[468px] overflow-y-auto rounded-xl border border-[#d7deea] bg-white p-5">
                 <div className="pointer-events-none absolute right-6 top-28 -rotate-45 text-6xl font-semibold text-[#e7edf8]">nomadcv</div>
-                <h4 className="text-[2.1rem] font-extrabold uppercase tracking-tight text-[#2458f5]">JEAN DUPONT</h4>
+                <h4 style={{ color: selectedColor, fontFamily: selectedFont }} className="text-[2.1rem] font-extrabold uppercase tracking-tight">
+                  JEAN DUPONT
+                </h4>
                 <p className="text-[1.2rem] text-[#334155]">{previewTitle}</p>
 
                 <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-[#334155]">
@@ -570,14 +867,14 @@ function AiAssistantWorkspaceDialog({
                   </span>
                 </div>
 
-                <div className="my-4 h-px bg-[#2458f5]" />
+                <div className="my-4 h-px" style={{ backgroundColor: selectedColor }} />
 
-                <h5 className="text-[1.4rem] font-bold uppercase text-[#2458f5]">Professional Summary</h5>
+                <h5 style={{ color: selectedColor, fontFamily: selectedFont }} className="text-[1.4rem] font-bold uppercase">Professional Summary</h5>
                 <p className="mt-1.5 text-[1.05rem] leading-relaxed text-[#334155]">
                   Professional with 5+ years of experience. Passionate and results-oriented expert.
                 </p>
 
-                <h5 className="mt-4 text-[1.4rem] font-bold uppercase text-[#2458f5]">Work Experience</h5>
+                <h5 style={{ color: selectedColor, fontFamily: selectedFont }} className="mt-4 text-[1.4rem] font-bold uppercase">Work Experience</h5>
                 <p className="mt-1 text-[1.5rem] font-bold text-[#0f172a]">{previewTitle}</p>
                 <p className="text-sm text-[#475569]">Enterprise Corp - 2021 - 2026</p>
                 <ul className="mt-1.5 list-disc space-y-0.5 pl-5 text-sm text-[#334155]">
@@ -586,14 +883,14 @@ function AiAssistantWorkspaceDialog({
                   <li>Performance improvement</li>
                 </ul>
 
-                <h5 className="mt-4 text-[1.4rem] font-bold uppercase text-[#2458f5]">Education</h5>
+                <h5 style={{ color: selectedColor, fontFamily: selectedFont }} className="mt-4 text-[1.4rem] font-bold uppercase">Education</h5>
                 <p className="mt-1 text-[1.5rem] font-bold text-[#0f172a]">Professional Master&apos;s</p>
                 <p className="text-sm text-[#475569]">Universite de Paris - 2017 - 2019</p>
 
-                <h5 className="mt-4 text-[1.4rem] font-bold uppercase text-[#2458f5]">Skills</h5>
+                <h5 style={{ color: selectedColor, fontFamily: selectedFont }} className="mt-4 text-[1.4rem] font-bold uppercase">Skills</h5>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {["Leadership", "Communication", "Management", "Innovation"].map((skill) => (
-                    <span key={skill} className="rounded-lg bg-[#2458f5] px-2.5 py-1 text-xs font-semibold text-white">
+                    <span key={skill} className="rounded-lg px-2.5 py-1 text-xs font-semibold text-white" style={{ backgroundColor: selectedColor }}>
                       {skill}
                     </span>
                   ))}
@@ -611,11 +908,17 @@ function AiAssistantWorkspaceDialog({
                 <Download className="mr-2 h-4 w-4" />
                 Download (free)
               </Button>
-              <Button type="button" className="h-11 rounded-2xl bg-[#2b5dff] px-7 text-[1rem] font-bold hover:bg-[#2453e6]">
+              <Button
+                type="button"
+                onClick={() => setWorkspaceStep("payment")}
+                className="h-11 rounded-2xl bg-[#2b5dff] px-7 text-[1rem] font-bold hover:bg-[#2453e6]"
+              >
                 Unlock Premium - 20EUR
               </Button>
             </div>
           </div>
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>

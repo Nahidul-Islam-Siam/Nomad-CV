@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,51 +8,82 @@ html {
   font-size: 1.25rem;
 }
 
+.open-sans {
+  font-family: "Open Sans", sans-serif;
+}
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+}
+
+.nunito {
+  font-family: "Nunito", sans-serif;
+}
+
+.ubuntu-light {
+  font-family: "Ubuntu", sans-serif;
+}
+
+.playfair {
+  font-family: "Playfair", serif;
+}
+
+.lora {
+  font-family: "Lora", serif;
+}
+
+.eb-garamond {
+  font-family: "EB Garamond", serif;
+}
+
+.lato-thin {
+  font-family: "Lato", sans-serif;
+}
+
 body {
   margin: 0;
 }
 
-svg {
+svg { 
   display: inline-block;
   vertical-align: middle;
 }
 
 path {
-  fill: #2a354d;
+  fill: #2a354d; 
 }
 
-.App {
+.App { 
   font-family: sans-serif;
   text-align: center;
-}
-
+} 
 
 /* Hide only the banner frame, preserve functionality */
 .goog-te-banner-frame {
-    display: none !important;
+  display: none !important;
 }
- 
+
 /* Keep the body positioning normal */
 body {
-    top: 0px !important;
+  top: 0px !important;
 }
- 
+
 /* Hide the visual bar but keep the underlying elements */
 .skiptranslate iframe {
-    visibility: hidden !important;
-    height: 0 !important;
-    border: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  border: none !important;
 }
- 
+
 /* Preserve the container but make it invisible */
 .skiptranslate {
-    height: 0 !important;
-    overflow: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
 }
- 
 
 @media (prefers-color-scheme: dark) {
-  :root { /* Dark background for dark mode */ /* Lighter text color for dark mode */
+  :root {
+    /* Dark background for dark mode */ /* Lighter text color for dark mode */
   }
 }
 
@@ -130,31 +163,28 @@ input[type="number"] {
   line-height: 38px !important;
 }
 
-
-
-
-
-:where(.css-dev-only-do-not-override-36gkoj).ant-segmented .ant-segmented-item-selected {
-  background-color: #E2C59F;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+:where(.css-dev-only-do-not-override-36gkoj).ant-segmented
+  .ant-segmented-item-selected {
+  background-color: #e2c59f;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.03),
+    0 1px 6px -1px rgba(0, 0, 0, 0.02),
+    0 2px 4px 0 rgba(0, 0, 0, 0.02);
   color: rgba(0, 0, 0, 0.88);
 }
 
-
 :where(.css-dev-only-do-not-override-36gkoj).ant-modal .ant-modal-title {
-    margin: 0;
-    color: rgba(0,0,0,0.88);
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 1.5;
-    word-wrap: break-word;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.5;
+  word-wrap: break-word;
 }
 
 .md\:text-\[30px\] {
-    font-size: 20px !important;
+  font-size: 20px !important;
 }
-
-
 
 @keyframes l21 {
   100% {
