@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -8,16 +9,24 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   ArrowRight,
+  Bot,
   Check,
   CheckCircle2,
   CloudUpload,
+  Download,
+  Eye,
   FileText,
   Lock,
   Mail,
+  MapPin,
+  Palette,
+  Phone,
   ShieldCheck,
   Sparkles,
   Star,
   TriangleAlert,
+  WandSparkles,
+  X,
 } from "lucide-react";
 
 type TemplateCard = {
@@ -263,11 +272,13 @@ function SelectedTemplateDialog({
   onOpenChange,
   template,
   onChooseTemplate,
+  onChooseAiAssistant,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   template: TemplateCard | null;
   onChooseTemplate: () => void;
+  onChooseAiAssistant: () => void;
 }) {
   if (!template) return null;
 
@@ -322,7 +333,10 @@ function SelectedTemplateDialog({
 
                   <Button
                     type="button"
-                    onClick={onChooseTemplate}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onChooseTemplate();
+                    }}
                     className="mt-8 h-12 w-full rounded-2xl bg-white/10 text-[1.5rem] font-bold text-white hover:bg-white/15"
                   >
                     Use template
@@ -330,7 +344,10 @@ function SelectedTemplateDialog({
                 </CardContent>
               </Card>
 
-              <Card className="rounded-3xl border-0 bg-gradient-to-br from-[#2a66ff] via-[#2458f5] to-[#1f47cf] text-white shadow-xl">
+              <Card
+                onClick={onChooseAiAssistant}
+                className="cursor-pointer rounded-3xl border-0 bg-gradient-to-br from-[#2a66ff] via-[#2458f5] to-[#1f47cf] text-white shadow-xl"
+              >
                 <CardContent className="p-6 sm:p-7">
                   <div className="mb-8 flex items-start justify-between">
                     <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15">
@@ -351,12 +368,252 @@ function SelectedTemplateDialog({
 
                   <Button
                     type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onChooseAiAssistant();
+                    }}
                     className="mt-8 h-12 w-full rounded-2xl bg-white/15 text-[1.5rem] font-bold text-white hover:bg-white/20"
                   >
                     Use AI
                   </Button>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function AiAssistantWorkspaceDialog({
+  open,
+  onOpenChange,
+  template,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  template: TemplateCard | null;
+}) {
+  const previewTitle = template?.title ?? "Academic Skills";
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="w-[96vw] max-w-[1140px] rounded-[20px] border-[#ccd7e6] bg-[#edf2f8] p-0 [&>button]:hidden">
+        <div className="flex max-h-[88vh] flex-col overflow-hidden">
+          <div className="border-b border-[#d4dcea] bg-[#e4eaf2] px-6 py-5">
+            <div className="flex items-start justify-between gap-5">
+              <div className="flex items-start gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#d4dcea] bg-white text-3xl font-bold text-[#2458f5]">
+                  N
+                </div>
+                <div>
+                  <h3 className="text-[2.8rem] font-extrabold leading-none text-[#0f172a]">
+                    Nomad<span className="text-[#2458f5]">CV</span>
+                    <WandSparkles className="ml-1 inline h-6 w-6 text-[#2458f5]" />
+                  </h3>
+                  <p className="mt-2 text-[1.15rem] font-medium text-[#4b5c74]">Customize your CV with AI</p>
+                </div>
+              </div>
+
+              <div className="min-w-[390px] rounded-2xl border border-[#d0d9e8] bg-white p-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.08em] text-[#2458f5]">
+                    <Eye className="h-4 w-4" />
+                    PROVEN RESULTS
+                  </span>
+                  <button type="button" onClick={() => onOpenChange(false)} className="text-[#9badc2] hover:text-[#64748b]">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="mt-3 flex items-center gap-4">
+                  <span className="text-6xl font-extrabold leading-none text-[#2458f5]">68%</span>
+                  <span className="text-[1.25rem] font-medium text-[#334155]">got an interview within 2 weeks</span>
+                </div>
+                <div className="mt-3 grid grid-cols-4 gap-1.5">
+                  <div className="h-1 rounded-full bg-[#cfd8e6]" />
+                  <div className="h-1 rounded-full bg-[#2458f5]" />
+                  <div className="h-1 rounded-full bg-[#cfd8e6]" />
+                  <div className="h-1 rounded-full bg-[#cfd8e6]" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-b border-[#d4dcea] bg-[#f6f8fc] px-6 py-4">
+            <div className="mx-auto flex max-w-[500px] items-center justify-between text-[#8ca0b8]">
+              <span className="inline-flex items-center gap-2 text-[1rem] font-semibold">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#cfdae8] text-sm text-[#42546c]">1</span>
+                Template
+              </span>
+              <span className="h-1 w-14 rounded bg-[#cdd7e6]" />
+              <span className="inline-flex items-center gap-2 text-[1rem] font-semibold text-[#2458f5]">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#2458f5] text-sm text-white">2</span>
+                Edit
+              </span>
+              <span className="h-1 w-14 rounded bg-[#cdd7e6]" />
+              <span className="inline-flex items-center gap-2 text-[1rem] font-semibold">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#cfdae8] text-sm text-[#42546c]">3</span>
+                Payment
+              </span>
+            </div>
+          </div>
+
+          <div className="grid flex-1 gap-4 overflow-hidden p-4 md:grid-cols-2">
+            <div className="min-h-0 rounded-2xl border border-[#cfd8e6] bg-[#eaf0f8] p-3">
+              <div className="grid grid-cols-3 gap-2 rounded-2xl border border-[#cfd8e6] bg-white p-1">
+                <button type="button" className="rounded-xl bg-[#2458f5] px-3 py-2 text-sm font-semibold text-white">
+                  <span className="inline-flex items-center gap-1.5">
+                    <FileText className="h-4 w-4" />
+                    Content
+                  </span>
+                </button>
+                <button type="button" className="rounded-xl px-3 py-2 text-sm font-semibold text-[#4b5c74] hover:bg-[#f2f6fb]">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Palette className="h-4 w-4" />
+                    Design
+                  </span>
+                </button>
+                <button type="button" className="rounded-xl px-3 py-2 text-sm font-semibold text-[#4b5c74] hover:bg-[#f2f6fb]">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Bot className="h-4 w-4" />
+                    AI
+                  </span>
+                </button>
+              </div>
+
+              <div className="mt-3 max-h-[430px] space-y-3 overflow-y-auto pr-1">
+                <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h4 className="text-base font-bold text-[#0f172a]">Experience</h4>
+                    <Button type="button" className="h-7 rounded-full bg-[#2458f5] px-3 text-xs font-semibold">
+                      + Add
+                    </Button>
+                  </div>
+                  <div className="space-y-2 rounded-lg border border-[#d7deea] bg-[#f8fafc] p-2.5">
+                    <input type="text" defaultValue={previewTitle} className="h-8 w-full rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                    <div className="grid grid-cols-2 gap-2">
+                      <input type="text" defaultValue="Enterprise Corp" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                      <input type="text" defaultValue="2021 - 2026" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                    </div>
+                    <textarea
+                      rows={3}
+                      defaultValue={"- Complex project management\n- Team leadership\n- Performance improvement"}
+                      className="w-full resize-none rounded border border-[#d4dcea] bg-white px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h4 className="text-base font-bold text-[#0f172a]">Education</h4>
+                    <Button type="button" className="h-7 rounded-full bg-[#2458f5] px-3 text-xs font-semibold">
+                      + Add
+                    </Button>
+                  </div>
+                  <div className="space-y-2 rounded-lg border border-[#d7deea] bg-[#f8fafc] p-2.5">
+                    <input
+                      type="text"
+                      defaultValue="Professional Master's"
+                      className="h-8 w-full rounded border border-[#d4dcea] bg-white px-2 text-sm"
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <input type="text" defaultValue="Universite de Paris" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                      <input type="text" defaultValue="2017 - 2019" className="h-8 rounded border border-[#d4dcea] bg-white px-2 text-sm" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-[#cfd8e6] bg-white p-3">
+                  <h4 className="mb-2 text-base font-bold text-[#0f172a]">Skills</h4>
+                  <div className="flex items-center gap-2">
+                    <input type="text" placeholder="Add a skill..." className="h-9 flex-1 rounded border border-[#d4dcea] bg-[#f8fafc] px-2 text-sm" />
+                    <Button type="button" className="h-9 w-9 rounded-xl bg-[#2458f5] p-0 text-lg">
+                      +
+                    </Button>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {["Leadership", "Communication", "Management", "Innovation"].map((skill) => (
+                      <span key={skill} className="rounded-lg border border-[#a8c4ff] bg-[#eef4ff] px-2.5 py-1 text-xs text-[#2458f5]">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="min-h-0 rounded-2xl border border-[#cfd8e6] bg-[#eaf0f8] p-3">
+              <h4 className="mb-2 text-[1.7rem] font-bold text-[#0f172a]">
+                <span className="inline-flex items-center gap-1.5">
+                  <Eye className="h-5 w-5 text-[#2458f5]" />
+                  Live Preview
+                </span>
+              </h4>
+              <div className="relative max-h-[468px] overflow-y-auto rounded-xl border border-[#d7deea] bg-white p-5">
+                <div className="pointer-events-none absolute right-6 top-28 -rotate-45 text-6xl font-semibold text-[#e7edf8]">nomadcv</div>
+                <h4 className="text-[2.1rem] font-extrabold uppercase tracking-tight text-[#2458f5]">JEAN DUPONT</h4>
+                <p className="text-[1.2rem] text-[#334155]">{previewTitle}</p>
+
+                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-[#334155]">
+                  <span className="inline-flex items-center gap-1">
+                    <Mail className="h-3.5 w-3.5 text-[#2458f5]" />
+                    jean.dupont@email.com
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <Phone className="h-3.5 w-3.5 text-[#2458f5]" />
+                    +33 6 12 34 56 78
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <MapPin className="h-3.5 w-3.5 text-[#2458f5]" />
+                    Paris, France
+                  </span>
+                </div>
+
+                <div className="my-4 h-px bg-[#2458f5]" />
+
+                <h5 className="text-[1.4rem] font-bold uppercase text-[#2458f5]">Professional Summary</h5>
+                <p className="mt-1.5 text-[1.05rem] leading-relaxed text-[#334155]">
+                  Professional with 5+ years of experience. Passionate and results-oriented expert.
+                </p>
+
+                <h5 className="mt-4 text-[1.4rem] font-bold uppercase text-[#2458f5]">Work Experience</h5>
+                <p className="mt-1 text-[1.5rem] font-bold text-[#0f172a]">{previewTitle}</p>
+                <p className="text-sm text-[#475569]">Enterprise Corp - 2021 - 2026</p>
+                <ul className="mt-1.5 list-disc space-y-0.5 pl-5 text-sm text-[#334155]">
+                  <li>Complex project management</li>
+                  <li>Team leadership</li>
+                  <li>Performance improvement</li>
+                </ul>
+
+                <h5 className="mt-4 text-[1.4rem] font-bold uppercase text-[#2458f5]">Education</h5>
+                <p className="mt-1 text-[1.5rem] font-bold text-[#0f172a]">Professional Master&apos;s</p>
+                <p className="text-sm text-[#475569]">Universite de Paris - 2017 - 2019</p>
+
+                <h5 className="mt-4 text-[1.4rem] font-bold uppercase text-[#2458f5]">Skills</h5>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {["Leadership", "Communication", "Management", "Innovation"].map((skill) => (
+                    <span key={skill} className="rounded-lg bg-[#2458f5] px-2.5 py-1 text-xs font-semibold text-white">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 border-t border-[#d4dcea] bg-white px-6 py-4">
+            <button type="button" className="text-[1.1rem] font-medium text-[#334155] hover:text-[#0f172a]">
+              &larr; Change template
+            </button>
+            <div className="flex items-center gap-3">
+              <Button type="button" variant="outline" className="h-11 rounded-2xl border-[#c7d3e6] bg-[#eef3fa] px-6 text-[1rem] font-semibold text-[#0f172a]">
+                <Download className="mr-2 h-4 w-4" />
+                Download (free)
+              </Button>
+              <Button type="button" className="h-11 rounded-2xl bg-[#2b5dff] px-7 text-[1rem] font-bold hover:bg-[#2453e6]">
+                Unlock Premium - 20EUR
+              </Button>
             </div>
           </div>
         </div>
@@ -586,6 +843,7 @@ export default function HomeCvLanding() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
   const [isPurchaseDialogOpen, setIsPurchaseDialogOpen] = useState(false);
+  const [isAiAssistantDialogOpen, setIsAiAssistantDialogOpen] = useState(false);
 
   const handleUseModel = (template: TemplateCard) => {
     if (isLoaderOpen) return;
@@ -602,6 +860,11 @@ export default function HomeCvLanding() {
   const handleChooseTemplate = () => {
     setIsTemplateDialogOpen(false);
     setIsPurchaseDialogOpen(true);
+  };
+
+  const handleChooseAiAssistant = () => {
+    setIsTemplateDialogOpen(false);
+    setIsAiAssistantDialogOpen(true);
   };
 
   useEffect(() => {
@@ -637,10 +900,16 @@ export default function HomeCvLanding() {
         onOpenChange={setIsTemplateDialogOpen}
         template={selectedTemplate}
         onChooseTemplate={handleChooseTemplate}
+        onChooseAiAssistant={handleChooseAiAssistant}
       />
       <PurchaseDialog
         open={isPurchaseDialogOpen}
         onOpenChange={setIsPurchaseDialogOpen}
+        template={selectedTemplate}
+      />
+      <AiAssistantWorkspaceDialog
+        open={isAiAssistantDialogOpen}
+        onOpenChange={setIsAiAssistantDialogOpen}
         template={selectedTemplate}
       />
     </div>
